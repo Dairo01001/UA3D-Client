@@ -91,7 +91,7 @@ export const Program = () => {
                         onClick={() => {
                           mutation.mutate({
                             id,
-                            status,
+                            status: !status,
                             accessToken
                           })
                         }}

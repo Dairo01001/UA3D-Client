@@ -24,8 +24,6 @@ export const updateProgram = async ({
   status: boolean
   accessToken: string
 }) => {
-  console.log(status)
-
   const response = await axios.put(
     `/programs/${id}`,
     { status },

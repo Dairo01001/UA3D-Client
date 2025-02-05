@@ -23,7 +23,7 @@ import { UserStatus } from './pages/user-status/user-status'
 import store from './redux/store'
 
 axios.defaults.baseURL =
-  import.meta.env.VITE_BACK_URL ?? 'http://localhost:3001'
+  import.meta.env.VITE_BACK_URL ?? 'http://localhost:3000'
 
 const Login = lazy(() => import('@/pages/Login/Login'))
 const Profile = lazy(() => import('@/pages/Profile/Profile'))
