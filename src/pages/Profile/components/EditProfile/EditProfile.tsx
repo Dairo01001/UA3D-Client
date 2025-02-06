@@ -1,4 +1,4 @@
-import { Calendar, Input } from '@/components'
+import { Calendar, Input, Label } from '@/components'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -122,23 +122,11 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="photo"
-                disabled={edit}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Foto de perfil</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="picture">Picture</Label>
+                <Input id="picture" type="file" />
+              </div>
+
               {!edit ? (
                 <div className="flex w-full justify-around">
                   <Button size="sm" className="bg-green-600" type="submit">
