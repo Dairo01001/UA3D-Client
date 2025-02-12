@@ -23,6 +23,7 @@ import { UserStatus } from './pages/user-status/user-status'
 import store from './redux/store'
 import { Console } from './pages/Console/console'
 import { AdminUser } from './pages/admin-user/admin-user'
+import { AdminUserDetails } from './pages/admin-user-details/admin-user-details'
 
 axios.defaults.baseURL =
   import.meta.env.VITE_BACK_URL ?? 'http://localhost:3000'
@@ -70,6 +71,7 @@ const App = () => {
                       <Route path="/user-status" element={<UserStatus />} />
                       <Route path="/servers" element={<AdminServer />} />
                       <Route path="/users" element={<AdminUser />} />
+                      <Route path="/user/:id" element={<AdminUserDetails />} />
                       <Route
                         path="/servers/:id"
                         element={<AdminServerDetails />}
