@@ -21,6 +21,7 @@ import ServerStatus from './pages/server-status/server-status'
 import { SignUp } from './pages/sign-up/sign-up'
 import { UserStatus } from './pages/user-status/user-status'
 import store from './redux/store'
+import { Console } from './pages/Console/console'
 
 axios.defaults.baseURL =
   import.meta.env.VITE_BACK_URL ?? 'http://localhost:3000'
@@ -70,6 +71,10 @@ const App = () => {
                       <Route
                         path="/servers/:id"
                         element={<AdminServerDetails />}
+                      />
+                      <Route
+                        path="/servers/:id/console"
+                        element={<Console />}
                       />
                     </Route>
                   </Route>

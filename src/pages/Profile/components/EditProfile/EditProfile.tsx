@@ -1,4 +1,4 @@
-import { Calendar, Input, Label } from '@/components'
+import { Calendar, Input } from '@/components'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -23,6 +23,8 @@ import { z } from 'zod'
 import { UserProfile } from '../../models'
 import { upsertMe } from '../../services'
 import { ProfileSchema } from './schema'
+import { UploadImg } from '@/components/upload-img'
+import { useToast } from '@/hooks'
 
 type EditProfileProps = {
   user: UserProfile
@@ -30,7 +32,9 @@ type EditProfileProps = {
 }
 
 export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
+  const { toast } = useToast()
   const { profile } = user
+  const [photo, setPhoto] = useState<string | null>(null)
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
@@ -40,12 +44,21 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
     }
   })
   const [edit, setEdit] = useState(true)
+  console.log(photo)
 
   const onSubmit = async (values: z.infer<typeof ProfileSchema>) => {
+    if (!photo) {
+      return toast({
+        title: 'Error al subir la imagen',
+        variant: 'destructive',
+        description: 'Debes subir una imagen de perfil'
+      })
+    }
+
     const upsertProfile = {
       birthDate: values.birthDate.toISOString(),
       phone: values.phone,
-      photo: values.photo,
+      photo: values.photo || photo || '',
       userId: user.id
     }
     upsertMe(accessToken, upsertProfile)
@@ -95,12 +108,10 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
+                          captionLayout="dropdown"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={date =>
-                            date > new Date() || date < new Date('1900-01-01')
-                          }
-                          initialFocus
+                          className="rounded-md border shadow"
                         />
                       </PopoverContent>
                     </Popover>
@@ -122,10 +133,32 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
                   </FormItem>
                 )}
               />
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="picture">Picture</Label>
-                <Input id="picture" type="file" />
-              </div>
+              <FormField
+                control={form.control}
+                disabled={edit}
+                name="photo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Foto</FormLabel>
+                    <FormControl>
+                      <Input
+                        value={photo || ''}
+                        onChange={e => {
+                          setPhoto(e.target.value)
+                          field.onChange(e)
+                        }}
+                        type="text"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <UploadImg
+                photo={photo}
+                setPhoto={setPhoto}
+                accessToken={accessToken}
+              />
 
               {!edit ? (
                 <div className="flex w-full justify-around">
@@ -148,6 +181,7 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
         <img
           src={
             profile?.photo ||
+            photo ||
             'https://rickandmortyapi.com/api/character/avatar/2.jpeg'
           }
           alt="Foto de perfil"
