@@ -15,13 +15,8 @@ export const createNewUser = async ({
   username,
   password
 }: NewUser): Promise<User> => {
-  await axios.post('/users', {
-    username,
-    password
-  })
-
   return (
-    await axios.post('/auth/login', {
+    await axios.post('/users', {
       username,
       password
     })

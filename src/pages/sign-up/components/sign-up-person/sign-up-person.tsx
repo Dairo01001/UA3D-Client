@@ -17,6 +17,7 @@ import { SignUpPersonSchema } from '../../schemas'
 import { createNewPerson } from '../../services/sign-up.service'
 import { FacultySelector } from '../faculty-selector'
 import { createNewUser } from '../services/sign-up.service'
+import { AxiosError } from 'axios'
 
 export const SignUpPerson = () => {
   const form = useForm<z.infer<typeof SignUpPersonSchema>>({
@@ -45,6 +46,7 @@ export const SignUpPerson = () => {
     }
     try {
       const user = await createNewUser(newUser)
+
       await createNewPerson({
         firstName: values.firstName,
         secondName: values.secondName,
@@ -61,6 +63,13 @@ export const SignUpPerson = () => {
       })
       navigate('/login')
     } catch (error) {
+      if (error instanceof AxiosError) {
+        return toast({
+          title: 'Error al crear usuario',
+          description: error.response?.data.error,
+          variant: 'destructive'
+        })
+      }
       toast({
         title: 'Error al crear usuario',
         description: 'El usuario no ha sido creado',
