@@ -1,4 +1,4 @@
-import { Bot, Settings, Settings2, SquareTerminal } from 'lucide-react'
+import { Bot, Settings, Settings2, User } from 'lucide-react'
 import * as React from 'react'
 
 import { NavMain } from '@/components/nav-main'
@@ -16,22 +16,14 @@ import { useAppSelector } from '@/hooks'
 const data = {
   navMain: [
     {
-      title: 'Terminal',
+      title: 'Usuarios',
       url: '#',
-      icon: SquareTerminal,
+      icon: User,
       isActive: false,
       items: [
         {
-          title: 'History',
-          url: '#'
-        },
-        {
-          title: 'Starred',
-          url: '#'
-        },
-        {
-          title: 'Settings',
-          url: '#'
+          title: 'Usuarios',
+          url: '/users'
         }
       ]
     },
