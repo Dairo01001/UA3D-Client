@@ -1,13 +1,26 @@
 import { Button, Input } from '@/components'
+import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { getServer } from './services/console.services'
+import { config } from '@/config/config'
+import { useCookies } from 'react-cookie'
 
 export const Console = () => {
+  const [cookie] = useCookies(['user'])
+  const { accessToken } = cookie.user
+  const { id } = useParams()
+  const { data, isLoading } = useQuery({
+    queryFn: () => getServer(id ?? '', accessToken),
+    queryKey: ['server', id]
+  })
   const [messages, setMessages] = useState([])
   const [history, setHistory] = useState([])
 
   useEffect(() => {
-    const ws = new WebSocket('ws://131.100.50.247:5000/ws')
+    if (!data) return
+    const ws = new WebSocket(config.wsUrl + data?.pvtoPort + '/ws')
 
     ws.onmessage = event => {
       setMessages(prevMessages => [...prevMessages, event.data])
@@ -28,12 +41,17 @@ export const Console = () => {
 
   const handleHistory = async () => {
     try {
-      const hist = (await axios.get('http://131.100.50.247:5000/history')).data
+      const hist = (
+        await axios.get(config.pvtoManagerUrl + data?.pvtoPort + '/history')
+      ).data
       setHistory(hist.history)
     } catch (error) {
       console.log(error.response.data.error)
     }
   }
+
+  if (isLoading || !data) return <p>Loading...</p>
+  console.log(data)
 
   return (
     <div className="flex h-full w-full flex-row items-center justify-center gap-3">
@@ -51,7 +69,7 @@ export const Console = () => {
             const formData = new FormData(e.target)
             const command = formData.get('command')
             axios
-              .post('http://131.100.50.247:5000/send_command', {
+              .post(config.pvtoManagerUrl + data?.pvtoPort + '/send_command', {
                 command
               })
               .then(() => {})

@@ -16,12 +16,13 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { CreateServerSchema } from './schemas'
 import { createServer } from './services'
+import { AxiosError } from 'axios'
 
 export const CreateServer = () => {
   const form = useForm<z.infer<typeof CreateServerSchema>>({
     resolver: zodResolver(CreateServerSchema),
     defaultValues: {
-      port: '',
+      port: 0,
       gridName: ''
     }
   })
@@ -39,7 +40,14 @@ export const CreateServer = () => {
       })
     },
     onError: err => {
-      console.log(err)
+      if (err instanceof AxiosError) {
+        toast({
+          title: 'Error',
+          description: err.response?.data.message,
+          variant: 'destructive'
+        })
+      }
+
       toast({
         title: 'Error',
         description: 'Ha ocurrido un error al crear el servidor',

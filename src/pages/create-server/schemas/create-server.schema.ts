@@ -1,30 +1,12 @@
-import { object, string, z } from 'zod'
+import { number, object, string, z } from 'zod'
 
 export const CreateServerSchema = object({
-  processId: string({
-    required_error: 'Process id is required'
-  }),
-  port: string({
+  port: number({
     required_error: 'Port is required'
-  }),
-  urlHost: string({
-    required_error: 'Url host is required'
-  }),
+  }).min(9000, { message: 'El puerto no puede ser menor a 9000' }),
   gridName: string({
     required_error: 'Server name is required'
-  }),
-  dataSource: string({
-    required_error: 'Data source is required'
-  }),
-  dataBaseName: string({
-    required_error: 'Database name is required'
-  }),
-  dataBaseUser: string({
-    required_error: 'Database user is required'
-  }),
-  dataBasePassword: string({
-    required_error: 'Database password is required'
-  })
+  }).min(1, { message: 'El nombre del servidor no puede estar vacío' })
 })
 
 export type CreateServerInput = z.infer<typeof CreateServerSchema>

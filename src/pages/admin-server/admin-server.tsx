@@ -16,7 +16,7 @@ export const AdminServer = () => {
       <ul className="flex flex-col gap-4">
         {data.map(({ gridName, id, status }) => (
           <li className="flex flex-col justify-between" key={id}>
-            <Link to={`/servers/${id}`}>{gridName}</Link>
+            <Link to={`/servers/${id}/console`}>{gridName}</Link>
             <p>{status.name}</p>
           </li>
         ))}

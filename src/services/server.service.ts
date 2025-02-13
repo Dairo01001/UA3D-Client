@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export interface ServerEntity {
   id: string
-  processId: string
+  pvtoPort: string
   port: number
   urlHost: string
   gridName: string

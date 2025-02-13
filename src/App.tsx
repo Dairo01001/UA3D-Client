@@ -24,9 +24,9 @@ import store from './redux/store'
 import { Console } from './pages/Console/console'
 import { AdminUser } from './pages/admin-user/admin-user'
 import { AdminUserDetails } from './pages/admin-user-details/admin-user-details'
+import { config } from './config/config'
 
-axios.defaults.baseURL =
-  import.meta.env.VITE_BACK_URL ?? 'http://localhost:3000'
+axios.defaults.baseURL = config.apiUrl
 
 const Login = lazy(() => import('@/pages/Login/Login'))
 const Profile = lazy(() => import('@/pages/Profile/Profile'))

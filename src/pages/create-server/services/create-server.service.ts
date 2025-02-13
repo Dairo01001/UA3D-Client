@@ -10,7 +10,7 @@ export const createServer = async ({
 }) => {
   const newServer = { ...data, port: Number(data.port) }
   return (
-    await axios.post('/servers', newServer, {
+    await axios.post(`servers/create`, newServer, {
       headers: { Authorization: `Bearer ${accessToken}` }
     })
   ).data
