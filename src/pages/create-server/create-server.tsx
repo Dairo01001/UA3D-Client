@@ -22,7 +22,7 @@ export const CreateServer = () => {
   const form = useForm<z.infer<typeof CreateServerSchema>>({
     resolver: zodResolver(CreateServerSchema),
     defaultValues: {
-      port: 0,
+      port: '',
       gridName: ''
     }
   })
