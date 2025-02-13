@@ -11,7 +11,7 @@ import {
   SidebarHeader,
   SidebarRail
 } from '@/components/ui/sidebar'
-import { useAppSelector } from '@/hooks'
+import { useUserMe } from '@/pages'
 
 const data = {
   navMain: [
@@ -80,7 +80,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const fullUser = useAppSelector(state => state.fullUser)
+  const { me } = useUserMe()
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -91,7 +91,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser profile={fullUser.profile} person={fullUser.person} />
+        <NavUser profile={me.profile} person={me.person} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

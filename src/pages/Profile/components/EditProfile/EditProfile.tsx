@@ -20,11 +20,12 @@ import { CalendarIcon, Edit } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { UserProfile } from '../../models'
+import { IProfile, UserProfile } from '../../models'
 import { upsertMe } from '../../services'
 import { ProfileSchema } from './schema'
 import { UploadImg } from '@/components/upload-img'
 import { useToast } from '@/hooks'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 type EditProfileProps = {
   user: UserProfile
@@ -44,7 +45,25 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
     }
   })
   const [edit, setEdit] = useState(true)
-  console.log(photo)
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (profile: Omit<IProfile, 'id'>) =>
+      upsertMe(accessToken, profile),
+    onSuccess: () => {
+      toast({
+        title: 'Perfil actualizado',
+        variant: 'default',
+        description: 'Perfil actualizado con éxito'
+      })
+      queryClient.invalidateQueries({ queryKey: ['FullUser'] })
+      setEdit(true)
+    },
+    onError: err => {
+      console.log(err)
+
+      setEdit(false)
+    }
+  })
 
   const onSubmit = async (values: z.infer<typeof ProfileSchema>) => {
     if (!photo) {
@@ -61,9 +80,7 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
       photo: values.photo || photo || '',
       userId: user.id
     }
-    upsertMe(accessToken, upsertProfile)
-      .then(() => setEdit(true))
-      .finally(() => setEdit(true))
+    mutation.mutate(upsertProfile)
   }
 
   return (

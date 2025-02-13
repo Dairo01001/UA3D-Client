@@ -18,10 +18,10 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
-import { useAppDispatch } from '@/hooks'
 import { PersonEntity, ProfileEntity } from '@/models'
-import { resetUser } from '@/redux'
 import { useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+import { initialsUsername } from '@/lib/utils'
 
 export function NavUser({
   profile,
@@ -31,7 +31,8 @@ export function NavUser({
   person: PersonEntity | null
 }) {
   const { isMobile } = useSidebar()
-  const dispatch = useAppDispatch()
+  const [cookies, __, removeCookie] = useCookies(['user'])
+  const { username } = cookies.user
   const navigate = useNavigate()
 
   return (
@@ -66,7 +67,9 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="rounded-lg">
                   <AvatarImage src={profile?.photo} alt={person?.firstName} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {initialsUsername(username)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
@@ -84,7 +87,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => dispatch(resetUser())}>
+            <DropdownMenuItem onClick={() => removeCookie('user')}>
               <LogOut />
               Cerrar Sesión
             </DropdownMenuItem>

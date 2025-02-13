@@ -26,7 +26,7 @@ export const NavBarAvatar = ({ user }: NavBarAvatarProps) => {
       <DropdownMenuTrigger asChild>
         <div className="mr-20 cursor-pointer">
           <Avatar>
-            <AvatarImage src={''} alt="Avatar" />
+            <AvatarImage src={user.photo} alt="Avatar" />
             <AvatarFallback>{initialsUsername(user.username)}</AvatarFallback>
           </Avatar>
         </div>

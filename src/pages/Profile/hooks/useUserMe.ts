@@ -2,20 +2,20 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { createFullUser } from '@/redux'
 import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import { useNavigate } from 'react-router-dom'
 import { getMe } from '../services'
+import { useQuery } from '@tanstack/react-query'
 
 export const useUserMe = () => {
   const [cookie] = useCookies(['user'])
-  const navigate = useNavigate()
   const fullUser = useAppSelector(state => state.fullUser)
   const dispatch = useAppDispatch()
-
+  const { data, isLoading } = useQuery({
+    queryFn: () => getMe(cookie.user),
+    queryKey: ['FullUser']
+  })
   useEffect(() => {
-    getMe(cookie.user)
-      .then(data => dispatch(createFullUser(data)))
-      .catch(() => navigate('/'))
-  }, [cookie.user])
+    dispatch(createFullUser(data))
+  }, [isLoading])
 
   return { me: fullUser }
 }
