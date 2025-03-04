@@ -14,8 +14,6 @@ export const upsertMe = async (
   accessToken: string,
   profile: Omit<IProfile, 'id'>
 ): Promise<IProfile> => {
-  console.log(profile)
-
   return (
     await axios.patch('/profiles', profile, {
       headers: { Authorization: `Bearer ${accessToken}` }

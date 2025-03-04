@@ -60,7 +60,9 @@ export const EditProfile = ({ user, accessToken }: EditProfileProps) => {
               const data = Object.fromEntries(formData.entries())
 
               const newProfile: Omit<IProfile, 'id'> = {
-                birthDate: data.birthDate.valueOf().toString(),
+                birthDate: new Date(
+                  data.birthDate.valueOf().toString()
+                ).toISOString(),
                 phone: data.phone.valueOf().toString(),
                 photo: imgUrl || ' ',
                 userId: user.id
