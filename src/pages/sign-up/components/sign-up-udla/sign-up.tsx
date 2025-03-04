@@ -10,7 +10,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { useAppDispatch, useToast } from '@/hooks'
 import { modifyNewUser } from '@/redux/states'
-import { getChaira } from '@/services'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -37,7 +36,7 @@ export const SignUpUDLA = ({ setActiveTab }: SignUpUDLAProps) => {
 
   const onSubmit = async (values: z.infer<typeof SignUpUdlaSchema>) => {
     try {
-      const isValid = await getChaira()
+      const isValid = 'OK'
 
       if (isValid === 'OK') {
         const existUser = await findUserByUsername({

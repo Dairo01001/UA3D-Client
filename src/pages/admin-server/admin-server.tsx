@@ -20,8 +20,8 @@ export const AdminServer = () => {
 
   return (
     <div className="w-full p-4">
-      <p className="text-center text-2xl">Servers</p>
-      <ul className="flex flex-col gap-4">
+      <p className="text-center text-2xl font-bold">Servidores</p>
+      <ul className="grid grid-cols-2 gap-4 pt-10">
         {data.map(({ gridName, id, status, pvtoPort }) => (
           <li
             key={id}

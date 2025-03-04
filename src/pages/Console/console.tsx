@@ -1,15 +1,20 @@
 import { Button, Input } from '@/components'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { getServer } from './services/console.services'
 import { config } from '@/config/config'
 import { useCookies } from 'react-cookie'
+import { useToast } from '@/hooks'
+import { Textarea } from '@/components/ui/textarea'
+import { Loader2 } from 'lucide-react'
 
 export const Console = () => {
   const [cookie] = useCookies(['user'])
   const { accessToken } = cookie.user
+  const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
   const { id } = useParams()
   const { data, isLoading } = useQuery({
     queryFn: () => getServer(id ?? '', accessToken),
@@ -41,38 +46,54 @@ export const Console = () => {
 
   const handleHistory = async () => {
     try {
+      setLoading(true)
       const hist = (
         await axios.get(config.pvtoManagerUrl + data?.pvtoPort + '/history')
       ).data
       setHistory(hist.history)
     } catch (error) {
-      console.log(error.response.data.error)
+      if (error instanceof AxiosError) {
+        toast({
+          title: 'Error al obtener historial',
+          variant: 'destructive',
+          description: error.response?.data.message
+        })
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
   if (isLoading || !data) return <p>Loading...</p>
-  console.log(data)
 
   return (
     <div className="flex h-full w-full flex-row items-center justify-center gap-3">
-      <div className="flex w-[80%] flex-col items-center justify-center space-y-4">
+      <div className="flex h-full w-[80%] flex-col items-center justify-center space-y-4">
         <h1 className="text-3xl">Terminal</h1>
-        <ul className="h-96 w-full overflow-y-auto rounded-md bg-slate-800 p-4 text-white">
-          {messages.map((msg, index) => (
-            <li key={index}>{msg}</li>
-          ))}
-        </ul>
+        <Textarea
+          contentEditable={false}
+          readOnly
+          className="h-full w-full"
+          value={messages.join('\n')}
+        />
         <form
           className="w-full"
           onSubmit={e => {
             e.preventDefault()
-            const formData = new FormData(e.target)
+            const formData = new FormData(e.currentTarget)
             const command = formData.get('command')
+            e.currentTarget.reset()
             axios
               .post(config.pvtoManagerUrl + data?.pvtoPort + '/send_command', {
                 command
               })
-              .then(() => {})
+              .then(() => {
+                toast({
+                  title: 'Comando enviado',
+                  variant: 'default',
+                  description: 'El comando se ha enviado correctamente'
+                })
+              })
           }}
         >
           <Input type="text" name="command" />
@@ -84,7 +105,16 @@ export const Console = () => {
             <li key={index}>{hist}</li>
           ))}
         </ul>
-        <Button onClick={() => handleHistory()}>Historial</Button>
+        <Button onClick={() => handleHistory()}>
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin" />
+              Cargando...
+            </>
+          ) : (
+            <>Historial</>
+          )}
+        </Button>
       </div>
     </div>
   )

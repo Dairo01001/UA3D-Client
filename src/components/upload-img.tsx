@@ -43,9 +43,9 @@ export const UploadImg = ({ setPhoto, accessToken }: UploadImgProps) => {
 
   return (
     <div className="flex w-full flex-row items-center justify-center gap-2">
-      <Label htmlFor="img">Subir imagen</Label>
+      <Label htmlFor="photo">Subir imagen</Label>
       <Input
-        name="img"
+        name="photo"
         type="file"
         onChange={handleFileChange}
         accept="image/*"
