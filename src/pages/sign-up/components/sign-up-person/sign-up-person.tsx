@@ -14,9 +14,8 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { SignUpPersonSchema } from '../../schemas'
-import { createNewPerson } from '../../services/sign-up.service'
 import { FacultySelector } from '../faculty-selector'
-import { createNewUser } from '../services/sign-up.service'
+import { createFullPerson } from '../services/sign-up.service'
 import { AxiosError } from 'axios'
 
 export const SignUpPerson = () => {
@@ -45,16 +44,16 @@ export const SignUpPerson = () => {
       return
     }
     try {
-      const user = await createNewUser(newUser)
-
-      await createNewPerson({
-        firstName: values.firstName,
-        secondName: values.secondName,
-        firstSurname: values.firstSurname,
-        secondSurname: values.secondSurname,
-        email: values.email,
-        programId: Number(programId),
-        userId: user.id
+      await createFullPerson({
+        user: newUser,
+        person: {
+          firstName: values.firstName,
+          secondName: values.secondName,
+          firstSurname: values.firstSurname,
+          secondSurname: values.secondSurname,
+          email: values.email,
+          programId: Number(programId)
+        }
       })
       toast({
         title: 'Usuario creado',
@@ -66,7 +65,7 @@ export const SignUpPerson = () => {
       if (error instanceof AxiosError) {
         return toast({
           title: 'Error al crear usuario',
-          description: error.response?.data.error,
+          description: error.response?.data.message,
           variant: 'destructive'
         })
       }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-interface NewPerson {
+export interface NewPerson {
   firstName: string
   secondName: string | undefined
   firstSurname: string
