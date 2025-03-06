@@ -17,8 +17,13 @@ import { SignUpPersonSchema } from '../../schemas'
 import { FacultySelector } from '../faculty-selector'
 import { createFullPerson } from '../services/sign-up.service'
 import { AxiosError } from 'axios'
+import { SignUpTabs } from '../../sign-up'
 
-export const SignUpPerson = () => {
+interface SignUpPersonProps {
+  setActiveTab: React.Dispatch<React.SetStateAction<SignUpTabs>>
+}
+
+export const SignUpPerson = ({ setActiveTab }: SignUpPersonProps) => {
   const form = useForm<z.infer<typeof SignUpPersonSchema>>({
     resolver: zodResolver(SignUpPersonSchema),
     defaultValues: {
@@ -63,6 +68,7 @@ export const SignUpPerson = () => {
       navigate('/login')
     } catch (error) {
       if (error instanceof AxiosError) {
+        setActiveTab('sign-up')
         return toast({
           title: 'Error al crear usuario',
           description: error.response?.data.message,

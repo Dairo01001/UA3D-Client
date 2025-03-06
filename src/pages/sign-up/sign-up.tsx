@@ -22,7 +22,7 @@ export const SignUp = () => {
           <SignUpUDLA setActiveTab={setActiveTab} />
         </TabsContent>
         <TabsContent value="sign-up-person">
-          <SignUpPerson />
+          <SignUpPerson setActiveTab={setActiveTab} />
         </TabsContent>
       </Tabs>
     </div>
