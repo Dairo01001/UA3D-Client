@@ -25,6 +25,7 @@ import { Console } from './pages/Console/console'
 import { AdminUser } from './pages/admin-user/admin-user'
 import { AdminUserDetails } from './pages/admin-user-details/admin-user-details'
 import { config } from './config/config'
+import { EditArchive } from './pages/edit-archive/EditArchive'
 
 axios.defaults.baseURL = config.apiUrl
 
@@ -72,6 +73,10 @@ const App = () => {
                       <Route path="/servers" element={<AdminServer />} />
                       <Route path="/users" element={<AdminUser />} />
                       <Route path="/user/:id" element={<AdminUserDetails />} />
+                      <Route
+                        path="/servers/:gridName/archive"
+                        element={<EditArchive />}
+                      />
                       <Route
                         path="/servers/:id"
                         element={<AdminServerDetails />}
