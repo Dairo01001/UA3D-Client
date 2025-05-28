@@ -1,4 +1,4 @@
-import { Button, Input } from '@/components'
+import { Button } from '@/components'
 import { useQuery } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
 import { useState, useEffect } from 'react'
@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie'
 import { useToast } from '@/hooks'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2 } from 'lucide-react'
+import { ComandBar } from './components/ComandBar'
 
 export const Console = () => {
   const [cookie] = useCookies(['user'])
@@ -28,7 +29,7 @@ export const Console = () => {
     const ws = new WebSocket(config.wsUrl + data?.pvtoPort + '/ws')
 
     ws.onmessage = event => {
-      setMessages(prevMessages => [...prevMessages, event.data])
+      setMessages(prevMessages => [event.data, ...prevMessages])
     }
 
     ws.onclose = () => {
@@ -70,34 +71,13 @@ export const Console = () => {
     <div className="flex h-full w-full flex-row items-center justify-center gap-3">
       <div className="flex h-full w-[80%] flex-col items-center justify-center space-y-4">
         <h1 className="text-3xl">Terminal</h1>
+        <ComandBar pvtoPort={data?.pvtoPort} />
         <Textarea
           contentEditable={false}
           readOnly
           className="h-full w-full"
           value={messages.join('\n')}
         />
-        <form
-          className="w-full"
-          onSubmit={e => {
-            e.preventDefault()
-            const formData = new FormData(e.currentTarget)
-            const command = formData.get('command')
-            e.currentTarget.reset()
-            axios
-              .post(config.pvtoManagerUrl + data?.pvtoPort + '/send_command', {
-                command
-              })
-              .then(() => {
-                toast({
-                  title: 'Comando enviado',
-                  variant: 'default',
-                  description: 'El comando se ha enviado correctamente'
-                })
-              })
-          }}
-        >
-          <Input type="text" name="command" />
-        </form>
       </div>
       <div className="flex h-full w-[20%] flex-col items-center justify-center space-y-4">
         <ul className="h-full w-full overflow-y-auto rounded-md bg-slate-800 p-4 text-white">

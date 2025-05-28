@@ -17,10 +17,10 @@ import { z } from 'zod'
 import { CreateServerSchema } from './schemas'
 import { createServer } from './services'
 import { AxiosError } from 'axios'
-import { useState } from 'react'
-import { Loader2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 export const CreateServer = () => {
+  const navigate = useNavigate()
   const form = useForm<z.infer<typeof CreateServerSchema>>({
     resolver: zodResolver(CreateServerSchema),
     defaultValues: {
@@ -29,14 +29,12 @@ export const CreateServer = () => {
     }
   })
   const [cookies] = useCookies(['user'])
-  const [loading, setLoading] = useState(false)
   const { accessToken } = cookies.user
   const { toast } = useToast()
 
   const mutation = useMutation({
     mutationFn: createServer,
     onSuccess: () => {
-      setLoading(false)
       toast({
         title: 'Creado',
         description: 'El servidor se ha creado correctamente',
@@ -44,7 +42,6 @@ export const CreateServer = () => {
       })
     },
     onError: err => {
-      setLoading(false)
       if (err instanceof AxiosError) {
         toast({
           title: 'Error',
@@ -62,7 +59,13 @@ export const CreateServer = () => {
   })
 
   const onSubmit = (data: z.infer<typeof CreateServerSchema>) => {
-    setLoading(true)
+    toast({
+      title: 'Creando',
+      description:
+        'Configurando el servidor, esto puede tomar unos minutos... Cuando termine, verás un mensaje de confirmación',
+      variant: 'default'
+    })
+    navigate('/')
     mutation.mutate({ data, accessToken })
   }
 
@@ -101,10 +104,7 @@ export const CreateServer = () => {
               </FormItem>
             )}
           />
-          <Button disabled={loading} type="submit">
-            {loading ? <Loader2 className="animate-spin" /> : null}
-            Crear
-          </Button>
+          <Button type="submit">Crear</Button>
         </form>
       </Form>
     </div>
