@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import { getArchives } from '../Server/services/edit-archive.service'
-import { Textarea } from '@/components/ui/textarea'
+import { EditForm } from './components/edit-form'
 
 export const EditArchive = () => {
   const { gridName } = useParams()
@@ -14,23 +14,20 @@ export const EditArchive = () => {
 
   return (
     <div>
-      <h4 className="pb-10 text-center text-xl font-bold">Editar archivo</h4>
-      <form>
-        <span className="text-center text-xl font-bold">WorldFile</span>
-        <Textarea
-          name="myWorldFile"
-          defaultValue={data.myWorldFile.content}
-          rows={10}
-          cols={100}
-        />
-        <span className="text-center text-xl font-bold">RegionFile</span>
-        <Textarea
-          name="regionFile"
-          defaultValue={data.regionFile.content}
-          rows={10}
-          cols={100}
-        />
-      </form>
+      <h4 className="pb-10 text-center text-xl font-bold">Editar archivos</h4>
+      <EditForm
+        title="WorldFile"
+        path={data.myWorldFile.path}
+        content={data.myWorldFile.content}
+        name="myWorldFile"
+      />
+      <div className="h-10" />
+      <EditForm
+        title="RegionFile"
+        path={data.regionFile.path}
+        content={data.regionFile.content}
+        name="regionFile"
+      />
     </div>
   )
 }
