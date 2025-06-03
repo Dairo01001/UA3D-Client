@@ -24,12 +24,13 @@ export const CommandSearch = () => {
 
   return (
     <div className="flex w-full flex-col gap-4">
+      <h4 className="pb-10 text-center text-xl font-bold">Buscar comandos</h4>
       <form onSubmit={handleSubmit} className="flex w-full flex-row gap-4">
         <Input
           required
           name="query"
           type="text"
-          placeholder="Como crear un servidor"
+          placeholder="Ej: Como subir un objeto"
         ></Input>
         <Button type="submit">Buscar</Button>
       </form>
