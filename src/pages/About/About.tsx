@@ -2,11 +2,6 @@ import { Card, CardProps } from './components'
 
 const owners: CardProps[] = [
   {
-    image: '/owners/dairo.png',
-    title: 'Desarrollador Full Stack',
-    fullName: 'Dairo García Naranjo'
-  },
-  {
     image: '/owners/toquica.png',
     title: 'Full Stack Developer',
     fullName: 'Jose Daniel Toquica Agudelo'
@@ -32,9 +27,14 @@ const owners: CardProps[] = [
     fullName: 'Edwin Eduardo Millán Rojas'
   },
   {
-    image: '/owners/janer.jpeg',
+    image: '/owners/janer.jpg',
     title: 'Presidente de la Universidad',
     fullName: 'Janer Edmundo Gonzales'
+  },
+  {
+    image: '/owners/anguie.jpg',
+    title: 'Desarrollo de Personajes',
+    fullName: 'Anguie Alexandra'
   }
 ]
 

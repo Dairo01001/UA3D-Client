@@ -5,5 +5,8 @@ export const config = {
     import.meta.env.VITE_PVTO_MANAGER_URL || 'http://localhost:3004',
   openManagerUrl:
     import.meta.env.VITE_OPEN_MANAGER_URL || 'http://localhost:3004',
-  port: 3004
+  port: 3004,
+  commandSearchURL:
+    import.meta.env.VITE_COMMAND_SEARCH_URL ||
+    'https://ocse.onrender.com/search'
 }

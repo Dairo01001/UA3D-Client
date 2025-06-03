@@ -26,6 +26,7 @@ import { AdminUser } from './pages/admin-user/admin-user'
 import { AdminUserDetails } from './pages/admin-user-details/admin-user-details'
 import { config } from './config/config'
 import { EditArchive } from './pages/edit-archive/EditArchive'
+import { CommandSearch } from './pages/command-search/CommandSearch'
 
 axios.defaults.baseURL = config.apiUrl
 
@@ -62,7 +63,7 @@ const App = () => {
                   </Route>
                   <Route element={<AdminGuard />}>
                     <Route element={<AdminLayout />}>
-                      <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+                      <Route path="/dashboard" element={<CommandSearch />} />
                       <Route path="/create-server" element={<CreateServer />} />
                       <Route path="/faculty" element={<Faculty />} />
                       <Route path="/faculty/:id" element={<FacultyDetail />} />
