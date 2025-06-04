@@ -73,7 +73,7 @@ export function AdminUser() {
               <TableCell>{role.name}</TableCell>
               <TableCell>{status.name}</TableCell>
               <TableCell>
-                <AdminUserOptions userId={id} />
+                <AdminUserOptions userId={id} accessToken={accessToken} />
               </TableCell>
             </TableRow>
           ))}

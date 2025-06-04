@@ -17,7 +17,6 @@ export const CommandSearch = () => {
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
     const query = data['query'].toString()
-    console.log(query)
 
     commandSearchService(query).then(setResult)
   }

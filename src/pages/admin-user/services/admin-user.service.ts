@@ -39,3 +39,16 @@ export const getAllUsers = async ({
       headers: { Authorization: `Bearer ${accessToken}` }
     })
   ).data
+
+export const deleteUser = async ({
+  accessToken,
+  userId
+}: {
+  accessToken: string
+  userId: string
+}) =>
+  (
+    await axios.delete(`/users/${userId}`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+  ).data
